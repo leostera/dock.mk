@@ -8,40 +8,49 @@
 ###
 ###   - init:    install/update dock.mk accordingly
 ###
-###   - build:	 create an image for the current Dockerfile
-###							 automatically tagged
+###   - build:   create an image for the current Dockerfile
+###              automatically tagged
 ###
-###		- publish: publish the current tag of the image to
-###							 the internal docker hub
+###   - publish: publish the current tag of the image to
+###              the internal docker hub
 ###
 ###   - clean:   removes all local images
 ###
 ###
-### Author(s): DevOps FRED 		<devops.fred.e@klarna.com>
-###						 Leandro Ostera <leandro.ostera@klarna.com>
+### Author(s):  Fred DevOps    <devops.fred.e@klarna.com>
+###             Leandro Ostera <leandro.ostera@klarna.com>
 ###
-### Based on dock.mk
+### Based on base.mk
 ###
 ### Copyright (c) 2015 Klarna
 ###========================================================================
-.PHONY: all init build publish clean
-.PHONY: dockme_build dockme_publish dockme_clean
+.PHONY: all init build publish clean exec
+.PHONY: dockmk_build dockmk_publish dockmk_clean dockmk_exec
+.PHONY: dockmk_build-latest dockmk_publish-latest
+
+ifndef PROJECT
+  $(error PROJECT should be defined)
+endif
+
+ifndef REGISTRY
+  $(error REGISTRY should be defined)
+endif
 
 ## Settings
 ## ========================================================================
-DOCKMK     := dock.mk
+DOCKERFILE ?= .
 
-REGISTRY   := hub.int.klarna.net
-
-DOCKER_CMD  = docker
-DOCKER      = $(shell docker info >/dev/null 2>&1 && echo "${DOCKER_CMD}" || echo "sudo ${DOCKER_CMD}")
-
-GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
-GIT_COMMIT := $(shell git rev-parse --short HEAD 2> /dev/null)
-
-VERSION     := $(GIT_BRANCH)-git$(GIT_COMMIT)
-TAG         := $(REGISTRY)/$(PROJECT):$(VERSION)
-LATEST_TAG  := $(REGISTRY)/$(PROJECT):latest
+## Internal Definitions
+## ========================================================================
+DOCKMK          := dock.mk
+DOCKER          := $(shell docker info >/dev/null 2>&1 && echo "docker" || echo "sudo docker")
+GIT_BRANCH      := $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
+GIT_COMMIT      := $(shell git rev-parse --short HEAD 2> /dev/null)
+TAG             := $(GIT_BRANCH)-git$(GIT_COMMIT)
+IMAGE_TAG       := $(PROJECT):$(TAG)
+IMAGE_LATEST    := $(PROJECT):latest
+ENDPOINT_TAG    := $(REGISTRY)/$(IMAGE_TAG)
+ENDPOINT_LATEST := $(REGISTRY)/$(IMAGE_LATEST)
 
 ## Targets
 ## ========================================================================
@@ -53,21 +62,28 @@ all::
 
 init: ; @okay
 
+exec:: | dockmk_exec
+dockmk_exec::
+	$(DOCKER) exec $(EXEC_OPTS) $(NAME) $(CMD)
+
 build:: | dockmk_build
 dockmk_build::
-	$(DOCKER) build -t $(TAG) .
+	$(DOCKER) build -t $(IMAGE_TAG) $(DOCKERFILE)
 
 build-latest:: | dockmk_build-latest
 dockmk_build-latest::
-	$(DOCKER) build -t $(LATEST_TAG) .
+	$(DOCKER) build -t $(IMAGE_LATEST) $(DOCKERFILE)
 
 publish:: | dockmk_publish
 dockmk_publish::
-	$(DOCKER) push $(TAG)
+	$(DOCKER) push $(ENDPOINT_TAG)
 
 publish-latest:: | dockmk_publish-latest
 dockmk_publish-latest::
-	$(DOCKER) push $(LATEST_TAG)
+	$(DOCKER) push $(ENDPOINT_LATEST)
 
 clean:: | dockmk_clean
-dockmk_clean:: ; @okay
+dockmk_clean::
+	rm -f dock.mk
+	rm -f .dockmk-vsn-*
+	$(DOCKER) rmi -f $(IMAGE_TAG) $(IMAGE_LATEST)
