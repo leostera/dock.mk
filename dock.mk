@@ -74,9 +74,6 @@ init: ; @okay
 
 exec:: | dockmk_exec
 dockmk_exec::
-ifndef NAME
-  $(error please specify a NAME)
-endif
 	$(DOCKER) exec $(EXEC_OPTS) $(NAME) $(CMD)
 
 run:: | dockmk_run
