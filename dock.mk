@@ -8,6 +8,10 @@
 ###
 ###   - init:    install/update dock.mk accordingly
 ###
+###   - exec:    execute a given command in a given container
+###
+###   - run:     run a container of the current image
+###
 ###   - build:   create an image for the current Dockerfile
 ###              automatically tagged
 ###
@@ -28,6 +32,8 @@
 .PHONY: dockmk_build dockmk_publish dockmk_clean dockmk_exec
 .PHONY: dockmk_build-latest dockmk_publish-latest
 
+## Checks
+###========================================================================
 ifndef PROJECT
   $(error PROJECT should be defined)
 endif
@@ -40,7 +46,8 @@ endif
 ## ========================================================================
 DOCKERFILE ?= .
 
-EXEC_OPTS  ?= --rm -ti
+RUN_OPTS   ?= --rm -ti
+EXEC_OPTS  ?= -ti
 CMD				 ?= /bin/sh
 
 ## Internal Definitions
@@ -68,6 +75,10 @@ init: ; @okay
 exec:: | dockmk_exec
 dockmk_exec::
 	$(DOCKER) exec $(EXEC_OPTS) $(NAME) $(CMD)
+
+run:: | dockmk_run
+dockmk_run::
+	$(DOCKER) run $(RUN_OPTS) $(IMAGE_TAG)
 
 build:: | dockmk_build
 dockmk_build::
