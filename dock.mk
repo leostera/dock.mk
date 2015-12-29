@@ -21,8 +21,7 @@
 ###   - clean:   removes all local images
 ###
 ###
-### Author(s):  Fred DevOps    <devops.fred.e@klarna.com>
-###             Leandro Ostera <leandro.ostera@klarna.com>
+### Author(s):  Leandro Ostera <leandro.ostera@klarna.com>
 ###
 ### Based on base.mk
 ###
@@ -48,7 +47,7 @@ DOCKERFILE ?= .
 
 RUN_OPTS   ?= --rm -ti
 EXEC_OPTS  ?= -ti
-CMD				 ?= /bin/sh
+CMD        ?= /bin/sh
 
 ## Internal Definitions
 ## ========================================================================
