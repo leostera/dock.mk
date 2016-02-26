@@ -88,6 +88,10 @@ publish:: | dockmk_build dockmk_publish
 dockmk_publish::
 	$(DOCKER) push $(IMAGE_NAME)
 
+tag:: | dockmk_tag
+dockmk_tag::
+	make build publish TAG=$(TAG)
+
 clean:: | dockmk_clean
 dockmk_clean::
 	rm -f dock.mk
