@@ -75,6 +75,10 @@ run:: | dockmk_run
 dockmk_run::
 	$(DOCKER) run $(RUN_OPTS) $(IMAGE_TAG) $(ARGS)
 
+kill:: | dockmk_kill
+dockmk_kill::
+	$(DOCKER) kill $(NAME)
+
 build:: | dockmk_build
 dockmk_build::
 	$(DOCKER) build -t $(IMAGE_TAG) $(DOCKERFILE)
