@@ -94,6 +94,9 @@ dockmk_tag::
 
 clean:: | dockmk_clean
 dockmk_clean::
+	$(DOCKER) rm $(NAME)
+
+remove:: | dockmk_remove
+dockmk_remove::
 	rm -f dock.mk
 	rm -f .dockmk-vsn-*
-	$(DOCKER) rmi -f $(IMAGE_TAG) $(IMAGE_LATEST)
