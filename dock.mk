@@ -61,7 +61,7 @@ DOCKMK          := dock.mk
 DOCKER          := $(shell docker info >/dev/null 2>&1 && echo "docker" || echo "sudo docker")
 GIT_BRANCH      := $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 GIT_COMMIT      := $(shell git rev-parse --short HEAD 2> /dev/null)
-TAG             := $(GIT_BRANCH).$(GIT_COMMIT)
+TAG             ?= $(GIT_BRANCH).$(GIT_COMMIT)
 IMAGE_NAME      := $(REGISTRY)/$(TEAM)/$(PROJECT):$(TAG)
 
 ## Targets
