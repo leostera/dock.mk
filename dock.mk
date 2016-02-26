@@ -27,9 +27,9 @@
 ###   - remove:  removes dock.mk installation
 ###
 ###========================================================================
-.PHONY: all init build publish clean exec
-.PHONY: dockmk_build dockmk_publish dockmk_clean dockmk_exec
-.PHONY: dockmk_build-latest dockmk_publish-latest
+.PHONY: all init exec run kill build publish tag clean remove stats
+.PHONY: dockmk_exec dockmk_run dockmk_kill dockmk_build dockmk_publish
+.PHONY: dockmk_tag dockmk_clean dockmk_remove dockmk_stats
 
 ## Checks
 ###========================================================================
