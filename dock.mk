@@ -80,7 +80,7 @@ dockmk_exec::
 
 run:: | dockmk_run
 dockmk_run::
-	$(DOCKER) run $(RUN_OPTS) $(IMAGE_TAG) $(ARGS)
+	$(DOCKER) run $(RUN_OPTS) $(IMAGE_NAME) $(ARGS)
 
 kill:: | dockmk_kill
 dockmk_kill::
@@ -88,7 +88,7 @@ dockmk_kill::
 
 build:: | dockmk_build
 dockmk_build::
-	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_TAG) $(DOCKERFILE)
+	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_NAME) $(DOCKERFILE)
 
 publish:: | dockmk_build dockmk_publish
 dockmk_publish::
