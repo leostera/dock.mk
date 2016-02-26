@@ -54,10 +54,7 @@ DOCKER          := $(shell docker info >/dev/null 2>&1 && echo "docker" || echo 
 GIT_BRANCH      := $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 GIT_COMMIT      := $(shell git rev-parse --short HEAD 2> /dev/null)
 TAG             := $(GIT_BRANCH).$(GIT_COMMIT)
-IMAGE_TAG       := $(PROJECT):$(TAG)
-IMAGE_LATEST    := $(PROJECT):latest
-ENDPOINT_TAG    := $(REGISTRY)/$(IMAGE_TAG)
-ENDPOINT_LATEST := $(REGISTRY)/$(TEAM)/$(IMAGE_LATEST)
+IMAGE_NAME      := $(REGISTRY)/$(TEAM)/$(PROJECT):$(TAG)
 
 ## Targets
 ## ========================================================================
