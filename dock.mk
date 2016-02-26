@@ -20,12 +20,6 @@
 ###
 ###   - clean:   removes all local images
 ###
-###
-### Author(s):  Leandro Ostera <leandro.ostera@klarna.com>
-###
-### Based on base.mk
-###
-### Copyright (c) 2015 Klarna
 ###========================================================================
 .PHONY: all init build publish clean exec
 .PHONY: dockmk_build dockmk_publish dockmk_clean dockmk_exec
