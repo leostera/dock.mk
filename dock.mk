@@ -84,17 +84,9 @@ build:: | dockmk_build
 dockmk_build::
 	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_TAG) $(DOCKERFILE)
 
-build-latest:: | dockmk_build-latest
-dockmk_build-latest::
-	$(DOCKER) build -t $(IMAGE_LATEST) $(DOCKERFILE)
-
 publish:: | dockmk_publish
 dockmk_publish::
 	$(DOCKER) push $(ENDPOINT_TAG)
-
-publish-latest:: | dockmk_publish-latest
-dockmk_publish-latest::
-	$(DOCKER) push $(ENDPOINT_LATEST)
 
 clean:: | dockmk_clean
 dockmk_clean::
