@@ -64,7 +64,7 @@ IMAGE_NAME      := $(REGISTRY)/$(TEAM)/$(PROJECT):$(TAG)
 # when running Make without explicit targets (i.e. make).
 all::
 
-init: ; @okay
+init: ; @true
 
 exec:: | dockmk_exec
 dockmk_exec::
