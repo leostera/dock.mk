@@ -46,6 +46,7 @@ DOCKERFILE ?= .
 RUN_OPTS   ?= --rm -ti
 EXEC_OPTS  ?= -ti
 CMD        ?= /bin/sh
+ARGS       ?=
 
 ## Internal Definitions
 ## ========================================================================
@@ -72,7 +73,7 @@ dockmk_exec::
 
 run:: | dockmk_run
 dockmk_run::
-	$(DOCKER) run $(RUN_OPTS) $(IMAGE_TAG)
+	$(DOCKER) run $(RUN_OPTS) $(IMAGE_TAG) $(ARGS)
 
 build:: | dockmk_build
 dockmk_build::
