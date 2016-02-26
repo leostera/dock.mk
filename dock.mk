@@ -12,13 +12,19 @@
 ###
 ###   - run:     run a container of the current image
 ###
+###   - kill:    kill the container of the current name
+###
+###   - clean:   remove the container of the current name
+###
 ###   - build:   create an image for the current Dockerfile
 ###              automatically tagged
 ###
 ###   - publish: publish the current tag of the image to
 ###              the internal docker hub
 ###
-###   - clean:   removes all local images
+###   - tag:     used to override the tag on build and publish
+###
+###   - remove:  removes dock.mk installation
 ###
 ###========================================================================
 .PHONY: all init build publish clean exec
