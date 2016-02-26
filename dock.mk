@@ -31,6 +31,10 @@ ifndef PROJECT
   $(error PROJECT should be defined)
 endif
 
+ifndef TEAM
+  $(error TEAM should be defined)
+endif
+
 ifndef REGISTRY
   $(error REGISTRY should be defined)
 endif
@@ -53,7 +57,7 @@ TAG             := $(GIT_BRANCH)-git$(GIT_COMMIT)
 IMAGE_TAG       := $(PROJECT):$(TAG)
 IMAGE_LATEST    := $(PROJECT):latest
 ENDPOINT_TAG    := $(REGISTRY)/$(IMAGE_TAG)
-ENDPOINT_LATEST := $(REGISTRY)/$(IMAGE_LATEST)
+ENDPOINT_LATEST := $(REGISTRY)/$(TEAM)/$(IMAGE_LATEST)
 
 ## Targets
 ## ========================================================================
