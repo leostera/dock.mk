@@ -84,9 +84,9 @@ build:: | dockmk_build
 dockmk_build::
 	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_TAG) $(DOCKERFILE)
 
-publish:: | dockmk_publish
+publish:: | dockmk_build dockmk_publish
 dockmk_publish::
-	$(DOCKER) push $(ENDPOINT_TAG)
+	$(DOCKER) push $(IMAGE_NAME)
 
 clean:: | dockmk_clean
 dockmk_clean::
