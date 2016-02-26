@@ -100,3 +100,7 @@ remove:: | dockmk_remove
 dockmk_remove::
 	rm -f dock.mk
 	rm -f .dockmk-vsn-*
+
+stats:: | dockmk_stats
+dockmk_stats::
+	$(DOCKER) stats --no-stream `$(DOCKER) ps | grep "$(NAME)" | grep Up | awk '{ print $$NF }' | xargs`
