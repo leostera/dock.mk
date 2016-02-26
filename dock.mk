@@ -45,6 +45,7 @@ DOCKERFILE ?= .
 
 RUN_OPTS   ?= --rm -ti
 EXEC_OPTS  ?= -ti
+BUILD_OPTS ?=
 CMD        ?= /bin/sh
 ARGS       ?=
 
@@ -81,7 +82,7 @@ dockmk_kill::
 
 build:: | dockmk_build
 dockmk_build::
-	$(DOCKER) build -t $(IMAGE_TAG) $(DOCKERFILE)
+	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_TAG) $(DOCKERFILE)
 
 build-latest:: | dockmk_build-latest
 dockmk_build-latest::
