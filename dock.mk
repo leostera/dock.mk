@@ -12,9 +12,12 @@
 ###
 ###   - run:     run a container of the current image
 ###
+###   - stop:    stop the container of the current name
+###
 ###   - kill:    kill the container of the current name
 ###
-###   - clean:   remove the container of the current name
+###   - clean:   removes dock.mk installation and the container
+###              of the current name
 ###
 ###   - build:   create an image for the current Dockerfile
 ###              automatically tagged
@@ -24,15 +27,19 @@
 ###
 ###   - tag:     used to override the tag on build and publish
 ###
-###   - remove:  removes dock.mk installation
+###   - remove:  remove the container of the current name
 ###
 ###========================================================================
-.PHONY: all init exec run kill build publish tag clean remove stats
-.PHONY: dockmk_exec dockmk_run dockmk_kill dockmk_build dockmk_publish
-.PHONY: dockmk_tag dockmk_clean dockmk_remove dockmk_stats
+.PHONY: all init exec run stop kill build publish tag clean remove stats
+.PHONY: dockmk_exec dockmk_run dockmk_stop dockmk_kill dockmk_build
+.PHONY: dockmk_publish dockmk_tag dockmk_clean dockmk_remove dockmk_stats
 
 ## Checks
 ###========================================================================
+ifndef CONTAINER_NAME
+  $(error CONTAINER_NAME should be defined)
+endif
+
 ifndef PROJECT
   $(error PROJECT should be defined)
 endif
@@ -76,22 +83,26 @@ init: ; @true
 
 exec:: | dockmk_exec
 dockmk_exec::
-	$(DOCKER) exec $(EXEC_OPTS) $(NAME) $(CMD)
+	$(DOCKER) exec $(EXEC_OPTS) $(CONTAINER_NAME) $(CMD)
 
 run:: | dockmk_run
 dockmk_run::
-	$(DOCKER) run $(RUN_OPTS) $(IMAGE_NAME) $(ARGS)
+	$(DOCKER) run $(RUN_OPTS) --name $(CONTAINER_NAME) $(IMAGE_NAME) $(ARGS)
+
+stop:: | dockmk_stop
+dockmk_stop::
+	-$(DOCKER) stop $(CONTAINER_NAME)
 
 kill:: | dockmk_kill
 dockmk_kill::
-	$(DOCKER) kill $(NAME)
+	$(DOCKER) kill $(CONTAINER_NAME)
 
 build:: | dockmk_build
 dockmk_build::
 	$(DOCKER) build $(BUILD_OPTS) -t $(IMAGE_NAME) $(DOCKERFILE)
 
-publish:: | dockmk_build dockmk_publish
-dockmk_publish::
+publish:: | dockmk_publish
+dockmk_publish:: | dockmk_build
 	$(DOCKER) push $(IMAGE_NAME)
 
 tag:: | dockmk_tag
@@ -99,14 +110,14 @@ dockmk_tag::
 	make build publish TAG=$(TAG)
 
 clean:: | dockmk_clean
-dockmk_clean::
-	$(DOCKER) rm $(NAME)
-
-remove:: | dockmk_remove
-dockmk_remove::
+dockmk_clean:: | dockmk_remove
 	rm -f dock.mk
 	rm -f .dockmk-vsn-*
 
+remove:: | dockmk_remove
+dockmk_remove:: | dockmk_stop
+	-$(DOCKER) rm $(CONTAINER_NAME)
+
 stats:: | dockmk_stats
 dockmk_stats::
-	$(DOCKER) stats --no-stream `$(DOCKER) ps | grep "$(NAME)" | grep Up | awk '{ print $$NF }' | xargs`
+	$(DOCKER) stats --no-stream `$(DOCKER) ps | grep "$(CONTAINER_NAME)" | grep Up | awk '{ print $$NF }' | xargs`
